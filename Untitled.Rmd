@@ -1,0 +1,39 @@
+---
+title: "class"
+author: "John Ball"
+date: "November 7, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(stringr)
+library(fs)
+
+# 1. Read data/ex_926_I.csv into a tibble and provide a summary.
+
+x_926 <- read_csv("data/ex_926_I.csv")
+summary(x_926)
+
+# 2. Create a vector with all the file names in data/.
+
+file_names <- dir_ls("data/")
+
+# 3. Create a vector with just the file names that have an "A" in them.
+
+file_name_A <- str_subset(file_names, pattern = "A")
+
+x <- map_dfr(file_names, read_csv, .id = "source")
+
+#map function, you give it a list of things, figures out how to slap everything together for you. 
+
+x %>%
+  group_by(source) %>%
+  count() %>%
+  arrange(desc(n))
+```
+
